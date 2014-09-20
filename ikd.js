@@ -211,3 +211,31 @@ ikd.create_ui = function (id, setup)
 
 	return ui;
 };
+
+// misc function
+ikd.get = function(url, cb, fail_cb)
+{
+    var xhr = null;
+    
+    if (window.XMLHttpRequest) {
+        xhr = new XMLHttpRequest();
+    } else if (window.ActiveXObject) {
+        xhr = new ActiveXObject("MSXML2.XMLHTTP.3.0");
+    }
+    
+    xhr.addEventListener("readystatechange", function() {
+        if(xhr.readyState === 4) {
+            if(xhr.status >= 400) {
+                if(fail_cb) {
+                    fail_cb(xhr.status);
+                }
+            }else{
+                cb(xhr.response);
+            }
+        }
+    });
+    xhr.open("GET", url, true);
+    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    xhr.send();
+};
+
